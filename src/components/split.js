@@ -131,7 +131,8 @@ class Split extends React.Component {
   }
 
   async handleSplit(event) {
-    console.log('event: ', event)
+    // console.log('event: ', event)
+    console.log('The Split button was clicked!')
   }
 
   // Reset form and component state
