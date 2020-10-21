@@ -90,6 +90,7 @@ class Split extends React.Component {
                         text='Split'
                         type='primary'
                         className='btn-lg'
+                        onClick={_this.handleSplit}
                       />
                     </Box>
                   </Col>
@@ -129,7 +130,10 @@ class Split extends React.Component {
     })
   }
 
-
+  async handleSplit(event) {
+    // console.log('event: ', event)
+    console.log('The Split button was clicked!')
+  }
 
   // Reset form and component state
   resetValues() {
