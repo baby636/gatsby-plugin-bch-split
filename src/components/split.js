@@ -129,7 +129,7 @@ class Split extends React.Component {
     })
   }
 
- 
+
 
   // Reset form and component state
   resetValues() {
@@ -206,7 +206,7 @@ class Split extends React.Component {
         WIF: data,
         errMsg: ''
       })
-      
+
       _this.onHandleToggleScanner()
     } catch (error) {
       _this.onHandleToggleScanner()
