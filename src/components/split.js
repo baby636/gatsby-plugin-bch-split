@@ -128,8 +128,8 @@ class Split extends React.Component {
     _this.populateAddress()
   }
 
-  // Stablish that the ABC address be the bitcoin cash
-  // address of the wallet if the mnemonic exists
+  // Populate the ABC address with the web wallet address, if the mnemonic for
+  // the address has already been generated.
   populateAddress() {
     const { walletInfo } = _this.props
     const { mnemonic, cashAddress } = walletInfo
@@ -140,7 +140,8 @@ class Split extends React.Component {
     }
     debugger
   }
-  handleSplit() {
+
+  async handleSplit() {
     try {
       _this.validateInputs()
 
@@ -154,8 +155,32 @@ class Split extends React.Component {
       *
       * Split
       *
-      * 
+      *
       * */
+      // Get Wallet Info
+      const walletInfo = getWalletInfo()
+      const slpAddress = walletInfo.slpAddress
+      const WIFFromReceiver = walletInfo.privateKey
+
+      if (!slpAddress || !WIFFromReceiver) {
+        throw new Error(
+          'You need to have a registered wallet to make a token sweep'
+        )
+      }
+
+      const SplitLib = typeof window !== 'undefined' ? window.BchSplit : null
+      if (!SplitLib) throw new Error('Splitting Library not found')
+
+      // Instancing the library
+      const splitLib = new SplitLib(paperWIF, WIFFromReceiver)
+      await splitLib.getBlockchainData()
+
+      console.log(`ABC address: ${this.ABCAddress}`)
+      console.log(`BCHN address: ${this.BCHNAddress}`)
+
+      // Constructing the sweep transaction
+      const transactionHex = await splitLib.splitCoins(this.ABCAddress, this.BCHNAddress)
+      console.log(`transactionHex: `, transactionHex)
 
 
       _this.resetValues()
@@ -165,6 +190,7 @@ class Split extends React.Component {
       _this.handleError(error)
     }
   }
+
   handleUpdate(event) {
     const value = event.target.value
     _this.setState({
@@ -299,6 +325,7 @@ class Split extends React.Component {
       }
     })
   }
+
   validateWIF(WIF) {
     if (typeof WIF !== 'string') {
       return false
@@ -314,6 +341,7 @@ class Split extends React.Component {
 
     return true
   }
+
   validateAddress(address) {
     let isValid = false
     const isBch = address.match('bitcoincash:')
@@ -326,6 +354,7 @@ class Split extends React.Component {
     return isValid
   }
 }
+
 Split.propTypes = {
   walletInfo: PropTypes.object,
 }
