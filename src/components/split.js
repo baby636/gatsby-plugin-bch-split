@@ -27,7 +27,6 @@ class Split extends React.Component {
       showScan: false,
       inFetch: false
     }
-
   }
 
   render() {
@@ -39,72 +38,77 @@ class Split extends React.Component {
             <Col sm={8}>
               <Box
                 loaded={!_this.state.inFetch}
-                className='hover-shadow border-none mt-2'
+                className="hover-shadow border-none mt-2"
               >
                 <Row>
-                  <Col sm={12} className='text-center'>
+                  <Col sm={12} className="text-center">
                     <h1>
                       <FontAwesomeIcon
-                        className='title-icon'
-                        size='xs'
-                        icon='paper-plane'
+                        className="title-icon"
+                        size="xs"
+                        icon="paper-plane"
                       />
                       <span>Split</span>
                     </h1>
-                    <p>Split your BCH and SLP tokens between the BCHN and ABC chains</p>
-                    <Box className='border-none'>
+                    <p>
+                      Split your BCH and SLP tokens between the BCHN and ABC
+                      chains
+                    </p>
+                    <Box className="border-none">
                       <Text
-                        id='WIF'
-                        name='WIF'
-                        placeholder='Enter A Private Key (WIF)'
-                        label='Private Key (WIF)'
-                        labelPosition='above'
+                        id="WIF"
+                        name="WIF"
+                        placeholder="Enter A Private Key (WIF)"
+                        label="Private Key (WIF)"
+                        labelPosition="above"
                         onChange={_this.handleUpdate}
-                        className='title-icon'
+                        className="title-icon"
                         value={_this.state.WIF}
                         buttonRight={
                           <Button
-                            icon='fa-qrcode'
+                            icon="fa-qrcode"
                             onClick={_this.handleModal}
                           />
                         }
                       />
 
                       <Text
-                        id='ABCAddress'
-                        name='ABCAddress'
-                        placeholder='Enter ABC Address'
-                        label='ABC Address'
-                        labelPosition='above'
+                        id="ABCAddress"
+                        name="ABCAddress"
+                        placeholder="Enter ABC Address"
+                        label="ABC Address"
+                        labelPosition="above"
                         value={_this.state.ABCAddress}
                         onChange={_this.handleUpdate}
                       />
                       <Text
-                        id='BCHNAddress'
-                        name='BCHNAddress'
-                        placeholder='Enter BCHN Address'
-                        label='BCHN Address'
-                        labelPosition='above'
+                        id="BCHNAddress"
+                        name="BCHNAddress"
+                        placeholder="Enter BCHN Address"
+                        label="BCHN Address"
+                        labelPosition="above"
                         value={_this.state.BCHNAddress}
                         onChange={_this.handleUpdate}
                       />
                       <Button
-                        text='Split'
-                        type='primary'
-                        className='btn-lg'
+                        text="Split"
+                        type="primary"
+                        className="btn-lg"
                         onClick={_this.handleSplit}
                       />
                     </Box>
                   </Col>
-                  <Col sm={12} className='text-center'>
+                  <Col sm={12} className="text-center">
                     {_this.state.errMsg && (
-                      <p className='error-color'>{_this.state.errMsg}</p>
+                      <p className="error-color">{_this.state.errMsg}</p>
                     )}
                     {_this.state.txId && (
                       <a
-                        target='_blank'
+                        target="_blank"
                         rel="noopener noreferrer"
-                        href={`https://explorer.bitcoin.com/bch/tx/${_this.state.txId}`}
+                        href={`https://explorer.bitcoin.com/bch/tx/${
+                          _this.state.txId
+                        }`}
                       >
                         Transaction ID: {_this.state.txId}
                       </a>
@@ -128,8 +132,8 @@ class Split extends React.Component {
     _this.populateAddress()
   }
 
-  // Stablish that the ABC address be the bitcoin cash
-  // address of the wallet if the mnemonic exists
+  // Populate the ABC address with the web wallet address, if the mnemonic for
+  // the address has already been generated.
   populateAddress() {
     const { walletInfo } = _this.props
     const { mnemonic, cashAddress } = walletInfo
@@ -138,9 +142,9 @@ class Split extends React.Component {
         ABCAddress: cashAddress
       })
     }
-    debugger
   }
-  handleSplit() {
+
+  async handleSplit() {
     try {
       _this.validateInputs()
 
@@ -151,28 +155,64 @@ class Split extends React.Component {
       })
 
       /*
-      *
-      * Split
-      *
-      * 
-      * */
+       *
+       * Split
+       *
+       *
+       * */
+      console.log(`ABC address: ${_this.state.ABCAddress}`)
+      console.log(`BCHN address: ${_this.state.BCHNAddress}`)
+      console.log(`WIF: ${_this.state.WIF}`)
 
+      // Get Wallet Info
+      const walletInfo = getWalletInfo()
+      const slpAddress = walletInfo.slpAddress
+      const WIFFromReceiver = walletInfo.privateKey
+
+      if (!slpAddress || !WIFFromReceiver) {
+        throw new Error(
+          'You need to have a registered wallet to make a token sweep'
+        )
+      }
+
+      const SplitLib = typeof window !== 'undefined' ? window.BchSplit : null
+      if (!SplitLib) throw new Error('Splitting Library not found')
+
+      // Instancing the library
+      const splitLib = new SplitLib(_this.state.WIF, WIFFromReceiver)
+      await splitLib.getBlockchainData()
+
+      // Constructing the sweep transaction
+      const { hexAbc, hexBchn } = await splitLib.splitCoins(
+        _this.state.ABCAddress,
+        _this.state.BCHNAddress
+      )
+      // console.log(`transactionHex: `, transactionHex)
+
+      // Broadcast the ABC transaction.
+      const txidAbc = await splitLib.abcSweeper.blockchain.broadcast(hexAbc)
+      console.log(`TXID for ABC transaction: ${txidAbc}`)
+
+      // Comment out this code until after the chain split.
+      // const txidBchn = await splitLib.bchnSweeper.blockchain.broadcast(hexBchn)
+      console.log(`TX not broadcast on BCHN until after chain split.`)
 
       _this.resetValues()
 
-
+      _this.setState({
+        txId: txidAbc
+      })
     } catch (error) {
       _this.handleError(error)
     }
   }
+
   handleUpdate(event) {
     const value = event.target.value
     _this.setState({
       [event.target.name]: value
     })
   }
-
-
 
   // Reset form and component state
   resetValues() {
@@ -183,7 +223,6 @@ class Split extends React.Component {
       errMsg: '',
       inFetch: false
     })
-
   }
 
   validateInputs() {
@@ -214,8 +253,6 @@ class Split extends React.Component {
     if (!isBCHNAddress) {
       throw new Error('BCHN Address  has wrong format ')
     }
-
-
   }
 
   onHandleToggleScanner() {
@@ -278,9 +315,9 @@ class Split extends React.Component {
             Rate limits exceeded, increase rate limits with a JWT token from
             <a
               style={{ marginLeft: '5px' }}
-              target='_blank'
-              href='https://fullstack.cash'
-              rel='noopener noreferrer'
+              target="_blank"
+              href="https://fullstack.cash"
+              rel="noopener noreferrer"
             >
               FullStack.cash
             </a>
@@ -299,6 +336,7 @@ class Split extends React.Component {
       }
     })
   }
+
   validateWIF(WIF) {
     if (typeof WIF !== 'string') {
       return false
@@ -314,6 +352,7 @@ class Split extends React.Component {
 
     return true
   }
+
   validateAddress(address) {
     let isValid = false
     const isBch = address.match('bitcoincash:')
@@ -326,8 +365,9 @@ class Split extends React.Component {
     return isValid
   }
 }
+
 Split.propTypes = {
-  walletInfo: PropTypes.object,
+  walletInfo: PropTypes.object
 }
 
 export default Split
