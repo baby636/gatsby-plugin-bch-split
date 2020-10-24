@@ -156,9 +156,9 @@ class Split extends React.Component {
       *
       *
       * */
-      console.log(`ABC address: ${this.ABCAddress}`)
-      console.log(`BCHN address: ${this.BCHNAddress}`)
-      console.log(`WIF: ${this.WIF}`)
+      console.log(`ABC address: ${_this.state.ABCAddress}`)
+      console.log(`BCHN address: ${_this.state.BCHNAddress}`)
+      console.log(`WIF: ${_this.state.WIF}`)
 
       // Get Wallet Info
       const walletInfo = getWalletInfo()
