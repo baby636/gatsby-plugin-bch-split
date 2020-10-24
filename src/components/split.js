@@ -138,7 +138,6 @@ class Split extends React.Component {
         ABCAddress: cashAddress
       })
     }
-    debugger
   }
 
   async handleSplit() {
