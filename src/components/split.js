@@ -21,7 +21,7 @@ class Split extends React.Component {
     this.state = {
       WIF: '',
       ABCAddress: '',
-      BCHNAddress:'',
+      BCHNAddress: '',
       errMsg: '',
       txId: '',
       showScan: false,
@@ -76,6 +76,7 @@ class Split extends React.Component {
                         placeholder='Enter ABC Address'
                         label='ABC Address'
                         labelPosition='above'
+                        value={_this.state.ABCAddress}
                         onChange={_this.handleUpdate}
                       />
                       <Text
@@ -84,6 +85,7 @@ class Split extends React.Component {
                         placeholder='Enter BCHN Address'
                         label='BCHN Address'
                         labelPosition='above'
+                        value={_this.state.BCHNAddress}
                         onChange={_this.handleUpdate}
                       />
                       <Button
@@ -122,7 +124,47 @@ class Split extends React.Component {
       </>
     )
   }
+  componentDidMount() {
+    _this.populateAddress()
+  }
 
+  // Stablish that the ABC address be the bitcoin cash
+  // address of the wallet if the mnemonic exists
+  populateAddress() {
+    const { walletInfo } = _this.props
+    const { mnemonic, cashAddress } = walletInfo
+    if (mnemonic && cashAddress) {
+      _this.setState({
+        ABCAddress: cashAddress
+      })
+    }
+    debugger
+  }
+  handleSplit() {
+    try {
+      _this.validateInputs()
+
+      // Turn on spinner
+      _this.setState({
+        inFetch: true,
+        errMsg: ''
+      })
+
+      /*
+      *
+      * Split
+      *
+      * 
+      * */
+
+
+      _this.resetValues()
+
+
+    } catch (error) {
+      _this.handleError(error)
+    }
+  }
   handleUpdate(event) {
     const value = event.target.value
     _this.setState({
@@ -130,45 +172,50 @@ class Split extends React.Component {
     })
   }
 
-  async handleSplit(event) {
-    // console.log('event: ', event)
-    console.log('The Split button was clicked!')
-  }
+
 
   // Reset form and component state
   resetValues() {
     _this.setState({
-      address: '',
-      amountSat: '',
+      BCHNAddress: '',
+      ABCAddress: '',
+      WIF: '',
       errMsg: '',
       inFetch: false
     })
-    const amountEle = document.getElementById('amountToSend')
-    amountEle.value = ''
 
-    const wifEle = document.getElementById('WIF')
-    wifEle.value = ''
   }
 
   validateInputs() {
-    const { address, amountSat } = _this.state
-    const amountNumber = Number(amountSat)
+    const { WIF, ABCAddress, BCHNAddress } = _this.state
 
-    if (!address) {
-      throw new Error('Address is required')
+    if (!WIF) {
+      throw new Error('WIF is required')
     }
 
-    if (!amountSat) {
-      throw new Error('Amount is required')
+    if (!ABCAddress) {
+      throw new Error('ABC Address is required')
+    }
+    if (!BCHNAddress) {
+      throw new Error('BCHN Address is required')
     }
 
-    if (!amountNumber) {
-      throw new Error('Amount must be a number')
+    const isWIF = _this.validateWIF(WIF)
+    if (!isWIF) {
+      throw new Error('Private Key ( WIF ) has a wrong format ')
     }
 
-    if (amountNumber < 0) {
-      throw new Error('Amount must be greater than zero')
+    const isABCAddress = _this.validateAddress(ABCAddress)
+    if (!isABCAddress) {
+      throw new Error('ABC Address  has wrong format ')
     }
+
+    const isBCHNAddress = _this.validateAddress(BCHNAddress)
+    if (!isBCHNAddress) {
+      throw new Error('BCHN Address  has wrong format ')
+    }
+
+
   }
 
   onHandleToggleScanner() {
@@ -188,8 +235,6 @@ class Split extends React.Component {
       WIF: '',
       errMsg: ''
     })
-    const wifEle = document.getElementById('WIF')
-    wifEle.value = ''
   }
 
   onHandleScan(data) {
@@ -269,7 +314,20 @@ class Split extends React.Component {
 
     return true
   }
-}
+  validateAddress(address) {
+    let isValid = false
+    const isBch = address.match('bitcoincash:')
+    const isSlp = address.match('simpleledger:')
 
+    if (isBch || isSlp) {
+      isValid = true
+    }
+
+    return isValid
+  }
+}
+Split.propTypes = {
+  walletInfo: PropTypes.object,
+}
 
 export default Split
