@@ -183,11 +183,19 @@ class Split extends React.Component {
       await splitLib.getBlockchainData()
 
       // Constructing the sweep transaction
-      const transactionHex = await splitLib.splitCoins(
+      const { hexAbc, hexBchn } = await splitLib.splitCoins(
         _this.state.ABCAddress,
         _this.state.BCHNAddress
       )
-      console.log(`transactionHex: `, transactionHex)
+      // console.log(`transactionHex: `, transactionHex)
+
+      // Broadcast the ABC transaction.
+      const txidAbc = await splitLib.abcSweeper.blockchain.broadcast(hexAbc)
+      console.log(`TXID for ABC transaction: ${txidAbc}`)
+
+      // Comment out this code until after the chain split.
+      // const txidBchn = await splitLib.bchnSweeper.blockchain.broadcast(hexBchn)
+      console.log(`TX not broadcast on BCHN until after chain split.`)
 
       _this.resetValues()
     } catch (error) {
