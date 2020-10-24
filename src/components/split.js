@@ -27,7 +27,6 @@ class Split extends React.Component {
       showScan: false,
       inFetch: false
     }
-
   }
 
   render() {
@@ -39,72 +38,77 @@ class Split extends React.Component {
             <Col sm={8}>
               <Box
                 loaded={!_this.state.inFetch}
-                className='hover-shadow border-none mt-2'
+                className="hover-shadow border-none mt-2"
               >
                 <Row>
-                  <Col sm={12} className='text-center'>
+                  <Col sm={12} className="text-center">
                     <h1>
                       <FontAwesomeIcon
-                        className='title-icon'
-                        size='xs'
-                        icon='paper-plane'
+                        className="title-icon"
+                        size="xs"
+                        icon="paper-plane"
                       />
                       <span>Split</span>
                     </h1>
-                    <p>Split your BCH and SLP tokens between the BCHN and ABC chains</p>
-                    <Box className='border-none'>
+                    <p>
+                      Split your BCH and SLP tokens between the BCHN and ABC
+                      chains
+                    </p>
+                    <Box className="border-none">
                       <Text
-                        id='WIF'
-                        name='WIF'
-                        placeholder='Enter A Private Key (WIF)'
-                        label='Private Key (WIF)'
-                        labelPosition='above'
+                        id="WIF"
+                        name="WIF"
+                        placeholder="Enter A Private Key (WIF)"
+                        label="Private Key (WIF)"
+                        labelPosition="above"
                         onChange={_this.handleUpdate}
-                        className='title-icon'
+                        className="title-icon"
                         value={_this.state.WIF}
                         buttonRight={
                           <Button
-                            icon='fa-qrcode'
+                            icon="fa-qrcode"
                             onClick={_this.handleModal}
                           />
                         }
                       />
 
                       <Text
-                        id='ABCAddress'
-                        name='ABCAddress'
-                        placeholder='Enter ABC Address'
-                        label='ABC Address'
-                        labelPosition='above'
+                        id="ABCAddress"
+                        name="ABCAddress"
+                        placeholder="Enter ABC Address"
+                        label="ABC Address"
+                        labelPosition="above"
                         value={_this.state.ABCAddress}
                         onChange={_this.handleUpdate}
                       />
                       <Text
-                        id='BCHNAddress'
-                        name='BCHNAddress'
-                        placeholder='Enter BCHN Address'
-                        label='BCHN Address'
-                        labelPosition='above'
+                        id="BCHNAddress"
+                        name="BCHNAddress"
+                        placeholder="Enter BCHN Address"
+                        label="BCHN Address"
+                        labelPosition="above"
                         value={_this.state.BCHNAddress}
                         onChange={_this.handleUpdate}
                       />
                       <Button
-                        text='Split'
-                        type='primary'
-                        className='btn-lg'
+                        text="Split"
+                        type="primary"
+                        className="btn-lg"
                         onClick={_this.handleSplit}
                       />
                     </Box>
                   </Col>
-                  <Col sm={12} className='text-center'>
+                  <Col sm={12} className="text-center">
                     {_this.state.errMsg && (
-                      <p className='error-color'>{_this.state.errMsg}</p>
+                      <p className="error-color">{_this.state.errMsg}</p>
                     )}
                     {_this.state.txId && (
                       <a
-                        target='_blank'
+                        target="_blank"
                         rel="noopener noreferrer"
-                        href={`https://explorer.bitcoin.com/bch/tx/${_this.state.txId}`}
+                        href={`https://explorer.bitcoin.com/bch/tx/${
+                          _this.state.txId
+                        }`}
                       >
                         Transaction ID: {_this.state.txId}
                       </a>
@@ -151,11 +155,11 @@ class Split extends React.Component {
       })
 
       /*
-      *
-      * Split
-      *
-      *
-      * */
+       *
+       * Split
+       *
+       *
+       * */
       console.log(`ABC address: ${_this.state.ABCAddress}`)
       console.log(`BCHN address: ${_this.state.BCHNAddress}`)
       console.log(`WIF: ${_this.state.WIF}`)
@@ -175,20 +179,17 @@ class Split extends React.Component {
       if (!SplitLib) throw new Error('Splitting Library not found')
 
       // Instancing the library
-      const splitLib = new SplitLib(paperWIF, WIFFromReceiver)
+      const splitLib = new SplitLib(_this.state.WIF, WIFFromReceiver)
       await splitLib.getBlockchainData()
 
-      console.log(`ABC address: ${this.ABCAddress}`)
-      console.log(`BCHN address: ${this.BCHNAddress}`)
-
       // Constructing the sweep transaction
-      const transactionHex = await splitLib.splitCoins(this.ABCAddress, this.BCHNAddress)
+      const transactionHex = await splitLib.splitCoins(
+        _this.state.ABCAddress,
+        _this.state.BCHNAddress
+      )
       console.log(`transactionHex: `, transactionHex)
 
-
       _this.resetValues()
-
-
     } catch (error) {
       _this.handleError(error)
     }
@@ -201,8 +202,6 @@ class Split extends React.Component {
     })
   }
 
-
-
   // Reset form and component state
   resetValues() {
     _this.setState({
@@ -212,7 +211,6 @@ class Split extends React.Component {
       errMsg: '',
       inFetch: false
     })
-
   }
 
   validateInputs() {
@@ -243,8 +241,6 @@ class Split extends React.Component {
     if (!isBCHNAddress) {
       throw new Error('BCHN Address  has wrong format ')
     }
-
-
   }
 
   onHandleToggleScanner() {
@@ -307,9 +303,9 @@ class Split extends React.Component {
             Rate limits exceeded, increase rate limits with a JWT token from
             <a
               style={{ marginLeft: '5px' }}
-              target='_blank'
-              href='https://fullstack.cash'
-              rel='noopener noreferrer'
+              target="_blank"
+              href="https://fullstack.cash"
+              rel="noopener noreferrer"
             >
               FullStack.cash
             </a>
@@ -359,7 +355,7 @@ class Split extends React.Component {
 }
 
 Split.propTypes = {
-  walletInfo: PropTypes.object,
+  walletInfo: PropTypes.object
 }
 
 export default Split
