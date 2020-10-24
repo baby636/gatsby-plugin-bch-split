@@ -198,6 +198,10 @@ class Split extends React.Component {
       console.log(`TX not broadcast on BCHN until after chain split.`)
 
       _this.resetValues()
+
+      _this.setState({
+        txId: txidAbc
+      })
     } catch (error) {
       _this.handleError(error)
     }
