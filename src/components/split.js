@@ -35,16 +35,33 @@ class Split extends React.Component {
     // to the selected modal
     _this.HELP_TEXT = {
       WIF: {
-        modalTitle: 'WIF',
-        text: 'WIF HELP'
+        modalTitle: 'WIF - Private Key',
+        text:
+`
+This text box requires the WIF private key for your paper wallet. This is the
+data encoded in the QR code of a paper wallet. It should start with the letter
+'K' or 'L' and be 52 characters long.
+`
       },
       BCHN: {
-        modalTitle: 'BCHN',
-        text: 'BCHN HELP'
+        modalTitle: 'BCHN Address',
+        text:
+`
+This text box should contain the address on the BCHN chain where you'd like the
+split funds sent.
+`
       },
       ABC: {
-        modalTitle: 'ABC',
-        text: 'ABC HELP'
+        modalTitle: 'ABC Address',
+        text:
+`
+This text box should contain the address on the ABC chain where you'd like the
+split funds sent.
+
+This web wallet automatically follows the ABC chain. This text box is auto-populated
+with the address of this wallet. If you want to send the funds to a different
+address, replace it with the address of your desire.
+`
       }
     }
   }
@@ -72,7 +89,8 @@ class Split extends React.Component {
                     </h1>
                     <p>
                       Split your BCH and SLP tokens between the BCHN and ABC
-                      chains
+                      chains. Instructions on how to use this tool are available
+                      at the bottom.
                     </p>
                     <Box className="border-none">
                       <Text
@@ -158,7 +176,7 @@ class Split extends React.Component {
                         rel="noopener noreferrer"
                         href={`https://explorer.bitcoin.com/bch/tx/${
                           _this.state.txId
-                          }`}
+                        }`}
                       >
                         Transaction ID: {_this.state.txId}
                       </a>
@@ -190,7 +208,6 @@ class Split extends React.Component {
   }
   // Help modal controller
   handleHelpModal(from) {
-
     let helpText = ''
     let helpTitle = ''
     if (from) {
@@ -202,7 +219,6 @@ class Split extends React.Component {
       helpText, // Modal content
       helpTitle // Modal title
     })
-
   }
   componentDidMount() {
     _this.populateAddress()
@@ -351,6 +367,7 @@ class Split extends React.Component {
       errMsg: ''
     })
   }
+
   // Populates WIF text field
   onScanWIF(data) {
     try {
@@ -368,6 +385,7 @@ class Split extends React.Component {
       throw error
     }
   }
+
   // Populates the BCHNAddress text field
   onScanBCHN(data) {
     try {
@@ -422,13 +440,13 @@ class Split extends React.Component {
       switch (scannerFrom) {
         case 'WIF':
           _this.onScanWIF(data)
-          break;
+          break
         case 'BCHNAddress':
           _this.onScanBCHN(data)
-          break;
+          break
         case 'ABCAddress':
           _this.onScanABC(data)
-          break;
+          break
       }
       _this.onHandleToggleScanner()
     } catch (error) {
