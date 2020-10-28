@@ -56,7 +56,8 @@ split funds sent.
         text:
 `
 This text box should contain the address on the ABC chain where you'd like the
-split funds sent.<br />
+split funds sent.\n\n
+
 
 This web wallet automatically follows the ABC chain. This text box is auto-populated
 with the address of this wallet. If you want to send the funds to a different
@@ -89,11 +90,11 @@ address, replace it with the address of your desire.
                     </h1>
                     <p>
                       Split your BCH and SLP tokens between the BCHN and ABC
-                      chains.<br />
+                      chains.<br /><br />
                       This tool requires that you have BCH or SLP tokens stored
                       to a paper wallet *before* the chain split on November 15th,
-                      2020. Instructions on how to use this tool are available
-                      at the bottom of the screen.
+                      2020. <u>Instructions on how to use this tool are available
+                      at the bottom of the screen.</u>
                     </p>
                     <Box className="border-none">
                       <Text
