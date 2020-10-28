@@ -219,7 +219,26 @@ address, replace it with the address of your desire.
                 >
                   <Row>
                     <Col sm={12} className="text-center">
-                      <h2>Test</h2>
+                      <h2>Instructions</h2>
+                      <p>
+                        In order to use this tool, you must have a paper wallet
+                        (or private key) holding BCH or SLP tokens <b>before</b>
+                        the chain split on November 15th, 2020. This tool will
+                        help you split your BCH and SLP tokens <b>after</b> the
+                        chain split happens.
+                      </p>
+                      <p>
+                        This video explains how to work with paper wallets. It
+                        shows how to create them, how to send funds to them, and
+                        how to retrieve funds from them.
+                      </p>
+                      <iframe
+                        width="100%"
+                        src="https://www.youtube.com/embed/e1JxSirCiXM"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                      />
                     </Col>
                   </Row>
                 </Box>
