@@ -67,7 +67,7 @@ class Split extends React.Component {
                         buttonRight={
                           <Button
                             icon="fa-qrcode"
-                            onClick={_this.handleModal}
+                            onClick={() => _this.handleModal('WIF')}
                           />
                         }
                       />
@@ -80,6 +80,12 @@ class Split extends React.Component {
                         labelPosition="above"
                         value={_this.state.ABCAddress}
                         onChange={_this.handleUpdate}
+                        buttonRight={
+                          <Button
+                            icon="fa-qrcode"
+                            onClick={() => _this.handleModal('ABCAddress')}
+                          />
+                        }
                       />
                       <Text
                         id="BCHNAddress"
@@ -89,6 +95,12 @@ class Split extends React.Component {
                         labelPosition="above"
                         value={_this.state.BCHNAddress}
                         onChange={_this.handleUpdate}
+                        buttonRight={
+                          <Button
+                            icon="fa-qrcode"
+                            onClick={() => _this.handleModal('BCHNAddress')}
+                          />
+                        }
                       />
                       <Button
                         text="Split"
@@ -108,7 +120,7 @@ class Split extends React.Component {
                         rel="noopener noreferrer"
                         href={`https://explorer.bitcoin.com/bch/tx/${
                           _this.state.txId
-                        }`}
+                          }`}
                       >
                         Transaction ID: {_this.state.txId}
                       </a>
@@ -254,16 +266,18 @@ class Split extends React.Component {
       throw new Error('BCHN Address  has wrong format ')
     }
   }
-
+  // Show/Hide QR Scanner
   onHandleToggleScanner() {
     _this.setState({
       showScan: !_this.state.showScan
     })
   }
 
-  handleModal() {
+  handleModal(from) {
+    const scannerFrom = from || ''
     _this.setState({
-      showScan: !_this.state.showScan
+      showScan: !_this.state.showScan,
+      scannerFrom
     })
   }
 
@@ -273,16 +287,10 @@ class Split extends React.Component {
       errMsg: ''
     })
   }
-
-  onHandleScan(data) {
+  // Populates WIF text field
+  onScanWIF(data) {
     try {
       _this.resetWIFValue()
-      if (!data) {
-        throw new Error('No Result!')
-      }
-      if (typeof data !== 'string') {
-        throw new Error('It should scan a bch address or slp address')
-      }
       // Validate Input
       const isWIF = _this.validateWIF(data)
       if (!isWIF) {
@@ -292,7 +300,72 @@ class Split extends React.Component {
         WIF: data,
         errMsg: ''
       })
+    } catch (error) {
+      throw error
+    }
+  }
+  // Populates the BCHNAddress text field
+  onScanBCHN(data) {
+    try {
+      _this.setState({
+        BCHNAddress: '',
+        errMsg: ''
+      })
+      // Validate Input
+      const isAddress = _this.validateAddress(data)
+      if (!isAddress) {
+        throw new Error('BCHN Address must be a BCH or SLP Address')
+      }
+      _this.setState({
+        BCHNAddress: data,
+        errMsg: ''
+      })
+    } catch (error) {
+      throw error
+    }
+  }
+  // Populates the ABCAddress text field
+  onScanABC(data) {
+    try {
+      _this.setState({
+        ABCAddress: '',
+        errMsg: ''
+      })
+      // Validate Input
+      const isAddress = _this.validateAddress(data)
+      if (!isAddress) {
+        throw new Error('ABC Address must be a BCH or SLP Address')
+      }
+      _this.setState({
+        ABCAddress: data,
+        errMsg: ''
+      })
+    } catch (error) {
+      throw error
+    }
+  }
+  // QR Scanner controller
+  onHandleScan(data) {
+    try {
+      if (!data) {
+        throw new Error('No Result!')
+      }
+      if (typeof data !== 'string') {
+        throw new Error('It should scan a bch address,a slp address or WIF')
+      }
+      const { scannerFrom } = _this.state
 
+      switch (scannerFrom) {
+        case 'WIF':
+          _this.onScanWIF(data)
+          break;
+        case 'BCHNAddress':
+          _this.onScanBCHN(data)
+          break;
+        case 'ABCAddress':
+          _this.onScanABC(data)
+          break;
+      }
       _this.onHandleToggleScanner()
     } catch (error) {
       _this.onHandleToggleScanner()
