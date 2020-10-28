@@ -25,7 +25,27 @@ class Split extends React.Component {
       errMsg: '',
       txId: '',
       showScan: false,
-      inFetch: false
+      inFetch: false,
+      showHelp: false,
+      helpText: '',
+      helpTitle: ''
+    }
+
+    // Object that contains data corresponding
+    // to the selected modal
+    _this.HELP_TEXT = {
+      WIF: {
+        modalTitle: 'WIF',
+        text: 'WIF HELP'
+      },
+      BCHN: {
+        modalTitle: 'BCHN',
+        text: 'BCHN HELP'
+      },
+      ABC: {
+        modalTitle: 'ABC',
+        text: 'ABC HELP'
+      }
     }
   }
 
@@ -70,6 +90,12 @@ class Split extends React.Component {
                             onClick={() => _this.handleModal('WIF')}
                           />
                         }
+                        buttonLeft={
+                          <Button
+                            icon="fa-question"
+                            onClick={() => _this.handleHelpModal('WIF')}
+                          />
+                        }
                       />
 
                       <Text
@@ -86,6 +112,12 @@ class Split extends React.Component {
                             onClick={() => _this.handleModal('ABCAddress')}
                           />
                         }
+                        buttonLeft={
+                          <Button
+                            icon="fa-question"
+                            onClick={() => _this.handleHelpModal('ABC')}
+                          />
+                        }
                       />
                       <Text
                         id="BCHNAddress"
@@ -99,6 +131,12 @@ class Split extends React.Component {
                           <Button
                             icon="fa-qrcode"
                             onClick={() => _this.handleModal('BCHNAddress')}
+                          />
+                        }
+                        buttonLeft={
+                          <Button
+                            icon="fa-question"
+                            onClick={() => _this.handleHelpModal('BCHN')}
                           />
                         }
                       />
@@ -136,9 +174,35 @@ class Split extends React.Component {
             handleOnHide={_this.onHandleToggleScanner}
             handleOnScan={_this.onHandleScan}
           />
+          <Content
+            title={_this.state.helpTitle}
+            modal
+            /*   modalFooter={this.modalFooter} */
+            show={_this.state.showHelp}
+            modalCloseButton
+            onHide={_this.handleHelpModal}
+          >
+            {_this.state.helpText}
+          </Content>
         </Content>
       </>
     )
+  }
+  // Help modal controller
+  handleHelpModal(from) {
+
+    let helpText = ''
+    let helpTitle = ''
+    if (from) {
+      helpText = _this.HELP_TEXT[from].text
+      helpTitle = _this.HELP_TEXT[from].modalTitle
+    }
+    _this.setState({
+      showHelp: !_this.state.showHelp, // Turn ON/OFF modal
+      helpText, // Modal content
+      helpTitle // Modal title
+    })
+
   }
   componentDidMount() {
     _this.populateAddress()
