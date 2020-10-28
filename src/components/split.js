@@ -234,6 +234,7 @@ address, replace it with the address of your desire.
                       </p>
                       <iframe
                         width="100%"
+                        min-height="450px"
                         src="https://www.youtube.com/embed/e1JxSirCiXM"
                         frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
