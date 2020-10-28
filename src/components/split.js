@@ -35,16 +35,31 @@ class Split extends React.Component {
     // to the selected modal
     _this.HELP_TEXT = {
       WIF: {
-        modalTitle: 'WIF',
-        text: 'WIF HELP'
+        modalTitle: 'WIF - Private Key',
+        text: `
+This input requires the WIF private key from your paper wallet. This is the
+data encoded in the QR code of a paper wallet. It should start with the letter
+'K' or 'L' and be 52 characters long.
+`
       },
       BCHN: {
-        modalTitle: 'BCHN',
-        text: 'BCHN HELP'
+        modalTitle: 'BCHN Address',
+        text: `
+This text box should contain the address on the BCHN chain where you'd like the
+split funds sent.
+`
       },
       ABC: {
-        modalTitle: 'ABC',
-        text: 'ABC HELP'
+        modalTitle: 'ABC Address',
+        text: `
+This text box should contain the address on the ABC chain where you'd like the
+split funds sent.\n\n
+
+
+This web wallet automatically follows the ABC chain. This text box is auto-populated
+with the address of this wallet. If you want to send the funds to a different
+address, replace it with the address of your desire.
+`
       }
     }
   }
@@ -72,7 +87,16 @@ class Split extends React.Component {
                     </h1>
                     <p>
                       Split your BCH and SLP tokens between the BCHN and ABC
-                      chains
+                      chains.
+                      <br />
+                      <br />
+                      This tool requires that you have BCH or SLP tokens stored
+                      to a paper wallet *before* the chain split on November
+                      15th, 2020.{' '}
+                      <u>
+                        Instructions on how to use this tool are available at
+                        the bottom of the screen.
+                      </u>
                     </p>
                     <Box className="border-none">
                       <Text
@@ -158,7 +182,7 @@ class Split extends React.Component {
                         rel="noopener noreferrer"
                         href={`https://explorer.bitcoin.com/bch/tx/${
                           _this.state.txId
-                          }`}
+                        }`}
                       >
                         Transaction ID: {_this.state.txId}
                       </a>
@@ -184,13 +208,51 @@ class Split extends React.Component {
           >
             {_this.state.helpText}
           </Content>
+
+          <Content>
+            <Row>
+              <Col sm={2} />
+              <Col sm={8}>
+                <Box
+                  loaded={!_this.state.inFetch}
+                  className="hover-shadow border-none mt-2"
+                >
+                  <Row>
+                    <Col sm={12} className="text-center">
+                      <h2>Instructions</h2>
+                      <p>
+                        In order to use this tool, you must have a paper wallet
+                        (or private key) holding BCH or SLP tokens <b>before</b>{' '}
+                        the chain split on November 15th, 2020. This tool will
+                        help you split your BCH and SLP tokens <b>after</b> the
+                        chain split happens.
+                      </p>
+                      <p>
+                        This video explains how to work with paper wallets. It
+                        shows how to create them, how to send funds to them, and
+                        how to retrieve funds from them.
+                      </p>
+                      <iframe
+                        width="100%"
+                        min-height="450px"
+                        src="https://www.youtube.com/embed/e1JxSirCiXM"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                      />
+                    </Col>
+                  </Row>
+                </Box>
+              </Col>
+              <Col sm={2} />
+            </Row>
+          </Content>
         </Content>
       </>
     )
   }
   // Help modal controller
   handleHelpModal(from) {
-
     let helpText = ''
     let helpTitle = ''
     if (from) {
@@ -202,7 +264,6 @@ class Split extends React.Component {
       helpText, // Modal content
       helpTitle // Modal title
     })
-
   }
   componentDidMount() {
     _this.populateAddress()
@@ -351,6 +412,7 @@ class Split extends React.Component {
       errMsg: ''
     })
   }
+
   // Populates WIF text field
   onScanWIF(data) {
     try {
@@ -368,6 +430,7 @@ class Split extends React.Component {
       throw error
     }
   }
+
   // Populates the BCHNAddress text field
   onScanBCHN(data) {
     try {
@@ -422,13 +485,13 @@ class Split extends React.Component {
       switch (scannerFrom) {
         case 'WIF':
           _this.onScanWIF(data)
-          break;
+          break
         case 'BCHNAddress':
           _this.onScanBCHN(data)
-          break;
+          break
         case 'ABCAddress':
           _this.onScanABC(data)
-          break;
+          break
       }
       _this.onHandleToggleScanner()
     } catch (error) {
