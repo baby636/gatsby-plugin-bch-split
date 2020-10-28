@@ -222,7 +222,7 @@ address, replace it with the address of your desire.
                       <h2>Instructions</h2>
                       <p>
                         In order to use this tool, you must have a paper wallet
-                        (or private key) holding BCH or SLP tokens <b>before</b>
+                        (or private key) holding BCH or SLP tokens <b>before</b>{' '}
                         the chain split on November 15th, 2020. This tool will
                         help you split your BCH and SLP tokens <b>after</b> the
                         chain split happens.
