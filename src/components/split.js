@@ -36,8 +36,7 @@ class Split extends React.Component {
     _this.HELP_TEXT = {
       WIF: {
         modalTitle: 'WIF - Private Key',
-        text:
-`
+        text: `
 This input requires the WIF private key from your paper wallet. This is the
 data encoded in the QR code of a paper wallet. It should start with the letter
 'K' or 'L' and be 52 characters long.
@@ -45,16 +44,14 @@ data encoded in the QR code of a paper wallet. It should start with the letter
       },
       BCHN: {
         modalTitle: 'BCHN Address',
-        text:
-`
+        text: `
 This text box should contain the address on the BCHN chain where you'd like the
 split funds sent.
 `
       },
       ABC: {
         modalTitle: 'ABC Address',
-        text:
-`
+        text: `
 This text box should contain the address on the ABC chain where you'd like the
 split funds sent.\n\n
 
@@ -90,11 +87,16 @@ address, replace it with the address of your desire.
                     </h1>
                     <p>
                       Split your BCH and SLP tokens between the BCHN and ABC
-                      chains.<br /><br />
+                      chains.
+                      <br />
+                      <br />
                       This tool requires that you have BCH or SLP tokens stored
-                      to a paper wallet *before* the chain split on November 15th,
-                      2020. <u>Instructions on how to use this tool are available
-                      at the bottom of the screen.</u>
+                      to a paper wallet *before* the chain split on November
+                      15th, 2020.{' '}
+                      <u>
+                        Instructions on how to use this tool are available at
+                        the bottom of the screen.
+                      </u>
                     </p>
                     <Box className="border-none">
                       <Text
@@ -205,6 +207,25 @@ address, replace it with the address of your desire.
             onHide={_this.handleHelpModal}
           >
             {_this.state.helpText}
+          </Content>
+
+          <Content>
+            <Row>
+              <Col sm={2} />
+              <Col sm={8}>
+                <Box
+                  loaded={!_this.state.inFetch}
+                  className="hover-shadow border-none mt-2"
+                >
+                  <Row>
+                    <Col sm={12} className="text-center">
+                      <h2>Test</h2>
+                    </Col>
+                  </Row>
+                </Box>
+              </Col>
+              <Col sm={2} />
+            </Row>
           </Content>
         </Content>
       </>
