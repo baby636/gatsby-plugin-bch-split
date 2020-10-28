@@ -38,7 +38,7 @@ class Split extends React.Component {
         modalTitle: 'WIF - Private Key',
         text:
 `
-This text box requires the WIF private key for your paper wallet. This is the
+This input requires the WIF private key from your paper wallet. This is the
 data encoded in the QR code of a paper wallet. It should start with the letter
 'K' or 'L' and be 52 characters long.
 `
@@ -56,7 +56,7 @@ split funds sent.
         text:
 `
 This text box should contain the address on the ABC chain where you'd like the
-split funds sent.
+split funds sent.<br />
 
 This web wallet automatically follows the ABC chain. This text box is auto-populated
 with the address of this wallet. If you want to send the funds to a different
@@ -89,8 +89,11 @@ address, replace it with the address of your desire.
                     </h1>
                     <p>
                       Split your BCH and SLP tokens between the BCHN and ABC
-                      chains. Instructions on how to use this tool are available
-                      at the bottom.
+                      chains.<br />
+                      This tool requires that you have BCH or SLP tokens stored
+                      to a paper wallet *before* the chain split on November 15th,
+                      2020. Instructions on how to use this tool are available
+                      at the bottom of the screen.
                     </p>
                     <Box className="border-none">
                       <Text
