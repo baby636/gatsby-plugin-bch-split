@@ -9,7 +9,7 @@ import QrReader from 'react-qr-reader'
 import { getWalletInfo } from 'gatsby-ipfs-web-wallet/src/components/localWallet'
 const { Text } = Inputs
 import ScannerModal from 'gatsby-ipfs-web-wallet/src/components/qr-scanner/modal'
-
+import './split.css'
 let _this
 
 class Split extends React.Component {
@@ -36,30 +36,32 @@ class Split extends React.Component {
     _this.HELP_TEXT = {
       WIF: {
         modalTitle: 'WIF - Private Key',
-        text: `
-This input requires the WIF private key from your paper wallet. This is the
-data encoded in the QR code of a paper wallet. It should start with the letter
-'K' or 'L' and be 52 characters long.
-`
+        text: <p>
+          This input requires the WIF private key from your paper wallet. This is the
+          data encoded in the QR code of a paper wallet. It should start with the letter
+          'K' or 'L' and be 52 characters long.
+        </p>
       },
       BCHN: {
         modalTitle: 'BCHN Address',
-        text: `
-This text box should contain the address on the BCHN chain where you'd like the
-split funds sent.
-`
+        text: <p>
+          This text box should contain the address on the BCHN chain where you'd like the
+          split funds sent.
+            </p>
       },
       ABC: {
         modalTitle: 'ABC Address',
-        text: `
-This text box should contain the address on the ABC chain where you'd like the
-split funds sent.\n\n
-
-
-This web wallet automatically follows the ABC chain. This text box is auto-populated
-with the address of this wallet. If you want to send the funds to a different
-address, replace it with the address of your desire.
-`
+        text: <div>
+          <p>
+            This text box should contain the address on the ABC chain where you'd like the
+            split funds sent.
+          </p>
+          <p>
+            This web wallet automatically follows the ABC chain. This text box is auto-populated
+            with the address of this wallet. If you want to send the funds to a different
+            address, replace it with the address of your desire.
+          </p>
+        </div>
       }
     }
   }
@@ -182,7 +184,7 @@ address, replace it with the address of your desire.
                         rel="noopener noreferrer"
                         href={`https://explorer.bitcoin.com/bch/tx/${
                           _this.state.txId
-                        }`}
+                          }`}
                       >
                         Transaction ID: {_this.state.txId}
                       </a>
@@ -232,14 +234,17 @@ address, replace it with the address of your desire.
                         shows how to create them, how to send funds to them, and
                         how to retrieve funds from them.
                       </p>
+                      <div className="video-background">
                       <iframe
                         width="100%"
                         min-height="450px"
                         src="https://www.youtube.com/embed/e1JxSirCiXM"
-                        frameborder="0"
+                        frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
+                        allowFullScreen
                       />
+                      </div>
+
                     </Col>
                   </Row>
                 </Box>
