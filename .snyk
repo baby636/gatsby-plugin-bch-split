@@ -1,0 +1,26 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.22.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - semantic-release > lodash:
+        patched: '2022-03-25T23:24:41.547Z'
+    - adminlte-2-react > browserify-css > lodash:
+        patched: '2022-03-25T23:24:41.547Z'
+    - adminlte-2-react > react-dates > lodash:
+        patched: '2022-03-25T23:24:41.547Z'
+    - semantic-release > @semantic-release/release-notes-generator > lodash:
+        patched: '2022-03-25T23:24:41.547Z'
+    - standard > eslint > lodash:
+        patched: '2022-03-25T23:24:41.547Z'
+    - semantic-release > @semantic-release/release-notes-generator > conventional-commits-parser > lodash:
+        patched: '2022-03-25T23:24:41.547Z'
+    - semantic-release > @semantic-release/release-notes-generator > conventional-changelog-writer > lodash:
+        patched: '2022-03-25T23:24:41.547Z'
+    - standard > eslint > inquirer > lodash:
+        patched: '2022-03-25T23:24:41.547Z'
+    - standard > eslint > table > lodash:
+        patched: '2022-03-25T23:24:41.547Z'
+    - adminlte-2-react > react-select > emotion > babel-plugin-emotion > @babel/helper-module-imports > @babel/types > lodash:
+        patched: '2022-03-25T23:24:41.547Z'

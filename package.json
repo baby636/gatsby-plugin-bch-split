@@ -6,7 +6,9 @@
   "scripts": {
     "test": "npm run lint",
     "build": "echo \"No build script setup\"",
-    "lint": "standard --env mocha --fix"
+    "lint": "standard --env mocha --fix",
+    "prepublish": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "keywords": [
     "gatsby",
@@ -27,6 +29,8 @@
     ]
   },
   "dependencies": {
-    "adminlte-2-react": "^0.1.27"
-  }
+    "adminlte-2-react": "^0.1.27",
+    "@snyk/protect": "latest"
+  },
+  "snyk": true
 }
