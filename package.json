@@ -15,8 +15,8 @@
   "author": "Chris Troutner <chris.troutner@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "semantic-release": "^17.1.1",
-    "standard": "^14.3.4"
+    "semantic-release": "^21.0.2",
+    "standard": "^15.0.0"
   },
   "release": {
     "publish": [
